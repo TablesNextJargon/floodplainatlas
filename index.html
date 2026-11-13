@@ -4,6 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#102b3a" />
+    <style>
+      .seo-fallback {
+        box-sizing: border-box;
+        max-width: 42rem;
+        margin: 2rem auto;
+        padding: 1rem 1.25rem;
+        color: #243640;
+        font: 0.95rem/1.5 system-ui, sans-serif;
+      }
+      .seo-fallback h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.2rem;
+      }
+      .seo-fallback p {
+        margin: 0.35rem 0;
+      }
+    </style>
     <meta name="description" content="Explore England’s river and sea flood zones on an interactive map. View Environment Agency Flood Zones 2 and 3, search by postcode and compare with satellite imagery." />
     <link rel="canonical" href="https://floodplainatlas.com/" />
     <meta property="og:type" content="website" />
@@ -29,7 +46,14 @@
     <title>England Flood Map | Floodplain Atlas</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main class="seo-fallback" aria-live="polite">
+        <h1>England flood zone map</h1>
+        <p>Environment Agency Flood Zones 2 and 3 for river and sea flooding in England. Search a postcode or compare flood zones with the landscape.</p>
+        <p>Explore the map around Ely and the Fens, with satellite imagery.</p>
+        <p>Loading the interactive map…</p>
+      </main>
+    </div>
     <noscript>Floodplain Atlas needs JavaScript to display the interactive England flood map.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
