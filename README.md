@@ -28,3 +28,6 @@ The 15.8 GB source GeoJSON stays outside Git. The existing PMTiles archive is
 included as versioned static chunks. See [data notes](docs/flood-data-notes.md).
 Rebuild data offline with `scripts/build_flood_tiles.py`; website builds never
 run the conversion.
+
+See [project operations](docs/project-operations.md) for hosting, data delivery,
+connected services, and the Herdr pane handoff setup.

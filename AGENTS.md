@@ -5,6 +5,9 @@ flood tiles and an optional Esri satellite basemap. Cloudflare Workers hosts
 the production app at floodplainatlas.com; the private flood archive is served
 from R2. Vercel remains available as a rollback deployment.
 
+Read [project operations](docs/project-operations.md) for the live hosting/data
+path, service boundaries, pane roles, and durable handoff context.
+
 Keep product text minimal and descriptive. Do not infer historic wetlands or
 restoration suitability from planning flood zones. Preserve attribution,
 keyboard access, mobile controls and honest loading/error states.
