@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.vercel/
+.data-build/
+.venv*/
+test-results/
+__pycache__/
+*.pmtiles
+*.mbtiles
+.env*

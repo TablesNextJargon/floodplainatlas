@@ -1,0 +1,29 @@
+{
+  "name": "floodplainatlas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 4322",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview --host 127.0.0.1 --port 4322",
+    "test": "node --experimental-strip-types --test scripts/flood-tile-source.test.mjs",
+    "test:browser": "node scripts/browser-smoke.cjs"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.18.0",
+    "pmtiles": "^4.5.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.3.0",
+    "playwright": "1.62.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8"
+  },
+  "engines": { "node": ">=22.12.0" }
+}
