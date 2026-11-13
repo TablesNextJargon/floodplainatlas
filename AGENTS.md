@@ -1,8 +1,9 @@
 # Floodplain Atlas
 
 A static React and TypeScript map built with Vite. MapLibre renders vector
-flood tiles and an optional Esri satellite basemap. Vercel hosts the app;
-Cloudflare manages the domain's DNS.
+flood tiles and an optional Esri satellite basemap. Cloudflare Workers hosts
+the production app at floodplainatlas.com; the private flood archive is served
+from R2. Vercel remains available as a rollback deployment.
 
 Keep product text minimal and descriptive. Do not infer historic wetlands or
 restoration suitability from planning flood zones. Preserve attribution,
@@ -18,8 +19,9 @@ rollback.
 
 Vercel remains the rollback deployment. The default `npm run build` must stay a
 normal Vercel/Vite build. Cloudflare builds use the explicit `cloudflare` or
-`preview` Vite mode. The user is the sole Cloudflare operator: do not deploy a
-Worker or change Cloudflare DNS, domains, or R2 from an agent session.
+`preview` Vite mode. Cloudflare account changes require explicit user
+authorization. For this migration, the user authorized the production Worker
+and apex domain cutover; do not change unrelated DNS records or R2 resources.
 
 Use `npm run build`, `npm run typecheck`, and `npm test` for checks. The browser
 journey is `npm run test:browser` against a running server (default port 4322;

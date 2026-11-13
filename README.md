@@ -2,7 +2,9 @@
 
 An England map of river and sea Flood Zones 2 and 3, with satellite imagery,
 postcode search and area inspection. Built with React, TypeScript, MapLibre and
-Vite. Static hosting on Vercel; domain DNS on Cloudflare.
+Vite. The production site is served by a Cloudflare Worker at floodplainatlas.com;
+the private flood tile archive is served from R2. Vercel remains available as
+the rollback deployment.
 
 ```sh
 npm ci
