@@ -389,8 +389,8 @@ const FloodMap = () => {
           </span>
         </header>
         <div className="sidebar-content">
-          <h1>Flood zone map</h1>
-          <p className="intro">Search a postcode or choose a place.</p>
+          <h1>England flood zone map</h1>
+          <p className="intro">Search a postcode or compare flood zones with the landscape.</p>
           <div className="basemap-switch" role="group" aria-label="Basemap">
             <button aria-pressed={basemap === 'map'} onClick={() => setBasemap('map')}>
               Map
@@ -549,6 +549,26 @@ const FloodMap = () => {
               rel="noreferrer"
             >
               Official flood map for planning ↗
+            </a>
+          </details>
+          <details className="coverage-note landscape-note">
+            <summary>Land and water</summary>
+            <p>
+              Flood Zones 2 and 3 map areas used in planning for river and sea
+              flooding. Explore them alongside the landscapes shaped by water
+              and by people.
+            </p>
+            <p>
+              Ely stands on higher ground in the Fens, once an island within
+              surrounding marshland. Large-scale drainage changed the Fens in
+              the 17th century.
+            </p>
+            <a
+              href="https://www.gov.uk/government/publications/fens-2100/fens-2100-summary-baseline-report"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Fens 2100+ history and landscape ↗
             </a>
           </details>
         </div>
