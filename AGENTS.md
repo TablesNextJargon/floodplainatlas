@@ -11,7 +11,15 @@ keyboard access, mobile controls and honest loading/error states.
 The national GeoJSON stays outside this repository. `public/data/` contains
 versioned chunks of a completed PMTiles archive plus its manifest. Preserve byte
 identity and HTTP range support. Never load the full national archive in the
-browser or regenerate tiles during a website build.
+browser or regenerate tiles during a website build. The Cloudflare Worker reads
+these same objects from the private `floodplainatlas-data` R2 bucket; its static
+asset build must exclude `/data/` while the Vercel build keeps those files for
+rollback.
+
+Vercel remains the rollback deployment. The default `npm run build` must stay a
+normal Vercel/Vite build. Cloudflare builds use the explicit `cloudflare` or
+`preview` Vite mode. The user is the sole Cloudflare operator: do not deploy a
+Worker or change Cloudflare DNS, domains, or R2 from an agent session.
 
 Use `npm run build`, `npm run typecheck`, and `npm test` for checks. The browser
 journey is `npm run test:browser` against a running server (default port 4322;
