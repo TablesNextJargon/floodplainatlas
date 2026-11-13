@@ -6,19 +6,16 @@
     <meta name="theme-color" content="#102b3a" />
     <style>
       .seo-fallback {
-        box-sizing: border-box;
-        max-width: 42rem;
-        margin: 2rem auto;
-        padding: 1rem 1.25rem;
-        color: #243640;
-        font: 0.95rem/1.5 system-ui, sans-serif;
-      }
-      .seo-fallback h1 {
-        margin: 0 0 0.5rem;
-        font-size: 1.2rem;
-      }
-      .seo-fallback p {
-        margin: 0.35rem 0;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
       }
     </style>
     <meta name="description" content="Explore England’s river and sea flood zones on an interactive map. View Environment Agency Flood Zones 2 and 3, search by postcode and compare with satellite imagery." />
@@ -53,7 +50,7 @@
   </head>
   <body>
     <div id="root">
-      <main class="seo-fallback" aria-live="polite">
+      <main class="seo-fallback">
         <h1>England flood zone map</h1>
         <p>Environment Agency Flood Zones 2 and 3 for river and sea flooding in England. Search a postcode or compare flood zones with the landscape.</p>
         <p>Explore the map around Ely and the Fens, with satellite imagery.</p>
