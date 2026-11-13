@@ -32,7 +32,7 @@ The local app runs at `http://127.0.0.1:4322`. `npm run build` is the regular Vi
 
 ## Connected services and credentials
 
-Cloudflare CLI, Cloudflare MCP, Vercel, GitHub, Google Search Console, and OpenSEO are separate connections. A successful login to one does not refresh the others. Never write access tokens, OAuth codes, cookies, or credential files into this repository or a handoff document. Inspect the relevant connection status before using a service; request the smallest permission needed if access is missing. Search Console access is needed for query/indexing data; OpenSEO is already connected to the `floodplainatlas.com` project under `patrickhadow@gmail.com`.
+Cloudflare CLI, Cloudflare MCP, Vercel, GitHub, Google Search Console, and OpenSEO are separate connections. A successful login to one does not refresh the others. Never write access tokens, OAuth codes, cookies, or credential files into this repository or a handoff document. Inspect the relevant connection status before using a service; request the smallest permission needed if access is missing. Search Console access is needed for query/indexing data; OpenSEO is already connected to the `floodplainatlas.com` project.
 
 ## Herdr pane and context handoff
 
