@@ -42,9 +42,9 @@ const SCOTLAND_SCENARIOS: Array<{ id: ScotlandScenario; label: string; color: st
   { id: 'SEPA_M_CC', label: 'Medium + climate change', color: FLOOD_ZONE_2_COLOR },
 ];
 const IRELAND_SCENARIOS: Array<{ id: IrelandScenario; label: string; color: string }> = [
-  { id: 'IE_10', label: 'High · 10 yr', color: FLOOD_ZONE_3_COLOR },
-  { id: 'IE_20', label: 'High · 20 yr', color: FLOOD_ZONE_3_COLOR },
-  { id: 'IE_100', label: 'Medium · 100 yr', color: FLOOD_ZONE_2_COLOR },
+  { id: 'IE_100', label: 'Medium · 100 yr', color: FLOOD_ZONE_3_COLOR },
+  { id: 'IE_10', label: 'High · 10 yr', color: FLOOD_ZONE_2_COLOR },
+  { id: 'IE_20', label: 'High · 20 yr', color: FLOOD_ZONE_2_COLOR },
   { id: 'IE_200', label: 'Medium · 200 yr', color: FLOOD_ZONE_2_COLOR },
   { id: 'IE_1000', label: 'Low · 1,000 yr', color: FLOOD_ZONE_2_COLOR },
 ];
@@ -134,7 +134,7 @@ const FloodMap = () => {
   const zonesRef = useRef(zones);
   const [scotlandScenario, setScotlandScenario] = useState<ScotlandScenario>('SEPA_H');
   const scotlandScenarioRef = useRef<ScotlandScenario>(scotlandScenario);
-  const [irelandScenario, setIrelandScenario] = useState<IrelandScenario>('IE_10');
+  const [irelandScenario, setIrelandScenario] = useState<IrelandScenario>('IE_100');
   const irelandScenarioRef = useRef<IrelandScenario>(irelandScenario);
   const [opacity, setOpacity] = useState(65);
   const [selection, setSelection] = useState<Selection | null>(null);
@@ -733,7 +733,7 @@ const FloodMap = () => {
           <details className="coverage-note">
             <summary>Data, coverage and attribution</summary>
             <p>
-              England, Wales, Scotland and the Republic of Ireland use separate datasets and classifications. Scotland and Ireland each show one selected scenario at a time. Ireland return periods combine only source products that publish that period: 20-year is NIFM river; 200-year is coastal; 100-year is CFRAM and NIFM river; 10- and 1,000-year include the available river and coastal products. Colors group source High scenarios in dark blue and Medium/Low in light blue; they do not make the classifications identical. Ireland coverage excludes Northern Ireland. Unshaded areas do not guarantee safety. These are strategic and planning layers, not live warnings or property-level assessments.
+              England, Wales, Scotland and the Republic of Ireland use separate datasets and classifications. Scotland and Ireland each show one selected scenario at a time. Ireland return periods combine only source products that publish that period: 20-year is NIFM river; 200-year is coastal; 100-year is CFRAM and NIFM river; 10- and 1,000-year include the available river and coastal products. Ireland's 100-year Medium scenario uses the dark blue of England's Flood Zone 3; other Ireland scenarios use teal. Colors do not make the classifications identical. Ireland coverage excludes Northern Ireland. Unshaded areas do not guarantee safety. These are strategic and planning layers, not live warnings or property-level assessments.
             </p>
             <p>Environment Agency — Flood Map for Planning, Flood Zones. Source data date unverified. © Environment Agency copyright and/or database right. All rights reserved.</p>
             <a href="https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47" target="_blank" rel="noreferrer">Environment Agency source description ↗</a>
