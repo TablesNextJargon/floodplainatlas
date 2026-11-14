@@ -32,11 +32,12 @@ type DataRegion = 'england' | 'wales' | 'scotland';
 type ScotlandScenario = 'SEPA_H' | 'SEPA_M' | 'SEPA_L' | 'SEPA_M_CC';
 type Zone = 'FZ2' | 'FZ3';
 const DATASETS: DataRegion[] = ['england', 'wales', 'scotland'];
+const SCOTLAND_FLOOD_COLOR = '#2464a5';
 const SCOTLAND_SCENARIOS: Array<{ id: ScotlandScenario; label: string; color: string }> = [
-  { id: 'SEPA_H', label: 'High · 10 yr', color: '#bf503d' },
-  { id: 'SEPA_M', label: 'Medium · 200 yr', color: '#e9a943' },
-  { id: 'SEPA_L', label: 'Low · 1,000 yr', color: '#b7a744' },
-  { id: 'SEPA_M_CC', label: 'Medium + climate change', color: '#9b77c7' },
+  { id: 'SEPA_H', label: 'High · 10 yr', color: SCOTLAND_FLOOD_COLOR },
+  { id: 'SEPA_M', label: 'Medium · 200 yr', color: SCOTLAND_FLOOD_COLOR },
+  { id: 'SEPA_L', label: 'Low · 1,000 yr', color: SCOTLAND_FLOOD_COLOR },
+  { id: 'SEPA_M_CC', label: 'Medium + climate change', color: SCOTLAND_FLOOD_COLOR },
 ];
 
 const sourceIdFor = (region: DataRegion): string => `flood-zones-${region}`;
@@ -46,7 +47,7 @@ const categoriesFor = (region: DataRegion): string[] => region === 'scotland'
   : ['FZ2', 'FZ3'];
 const categoryColor = (region: DataRegion, category: string): string => {
   if (region === 'scotland') {
-    return SCOTLAND_SCENARIOS.find(({ id }) => id === category)?.color ?? '#bf503d';
+    return SCOTLAND_FLOOD_COLOR;
   }
   return category === 'FZ2' ? '#47c5ce' : '#2464a5';
 };
