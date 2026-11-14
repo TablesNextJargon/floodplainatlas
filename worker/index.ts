@@ -5,6 +5,7 @@ const MANIFEST_KEYS = new Set([
   'england-flood-zones.json',
   'wales-flood-zones.json',
   'scotland-flood-zones.json',
+  'ireland-flood-zones.json',
 ]);
 const ENGLAND_CHUNK_PREFIX = '7d0c6cc226b8';
 const ENGLAND_CHUNK_COUNT = 14;
@@ -12,6 +13,8 @@ const WALES_CHUNK_PREFIX = 'f13a6c083270';
 const WALES_CHUNK_COUNT = 2;
 const SCOTLAND_CHUNK_PREFIX = '1490b5ac469f';
 const SCOTLAND_CHUNK_COUNT = 4;
+const IRELAND_CHUNK_PREFIX = '72c20b41734b';
+const IRELAND_CHUNK_COUNT = 5;
 
 interface ByteRange {
   start: number;
@@ -68,7 +71,11 @@ const isAllowedKey = (key: string): boolean => {
   const scotland = new RegExp(
     `^scotland-flood-zones-${SCOTLAND_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
   ).exec(key);
-  return Boolean(scotland && Number(scotland[1]) < SCOTLAND_CHUNK_COUNT);
+  if (scotland && Number(scotland[1]) < SCOTLAND_CHUNK_COUNT) return true;
+  const ireland = new RegExp(
+    `^ireland-flood-zones-${IRELAND_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
+  ).exec(key);
+  return Boolean(ireland && Number(ireland[1]) < IRELAND_CHUNK_COUNT);
 };
 
 // Support either R2 naming convention while the England archive rename is

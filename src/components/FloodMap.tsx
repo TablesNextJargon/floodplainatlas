@@ -28,10 +28,11 @@ interface Selection {
   reference: string;
 }
 
-type DataRegion = 'england' | 'wales' | 'scotland';
+type DataRegion = 'england' | 'wales' | 'scotland' | 'ireland';
 type ScotlandScenario = 'SEPA_H' | 'SEPA_M' | 'SEPA_L' | 'SEPA_M_CC';
+type IrelandScenario = 'IE_10' | 'IE_20' | 'IE_100' | 'IE_200' | 'IE_1000';
 type Zone = 'FZ2' | 'FZ3';
-const DATASETS: DataRegion[] = ['england', 'wales', 'scotland'];
+const DATASETS: DataRegion[] = ['england', 'wales', 'scotland', 'ireland'];
 const FLOOD_ZONE_2_COLOR = '#47c5ce';
 const FLOOD_ZONE_3_COLOR = '#2464a5';
 const SCOTLAND_SCENARIOS: Array<{ id: ScotlandScenario; label: string; color: string }> = [
@@ -40,15 +41,27 @@ const SCOTLAND_SCENARIOS: Array<{ id: ScotlandScenario; label: string; color: st
   { id: 'SEPA_L', label: 'Low · 1,000 yr', color: FLOOD_ZONE_2_COLOR },
   { id: 'SEPA_M_CC', label: 'Medium + climate change', color: FLOOD_ZONE_2_COLOR },
 ];
+const IRELAND_SCENARIOS: Array<{ id: IrelandScenario; label: string; color: string }> = [
+  { id: 'IE_10', label: 'High · 10 yr', color: FLOOD_ZONE_3_COLOR },
+  { id: 'IE_20', label: 'High · 20 yr', color: FLOOD_ZONE_3_COLOR },
+  { id: 'IE_100', label: 'Medium · 100 yr', color: FLOOD_ZONE_2_COLOR },
+  { id: 'IE_200', label: 'Medium · 200 yr', color: FLOOD_ZONE_2_COLOR },
+  { id: 'IE_1000', label: 'Low · 1,000 yr', color: FLOOD_ZONE_2_COLOR },
+];
 
 const sourceIdFor = (region: DataRegion): string => `flood-zones-${region}`;
 const layerIdFor = (region: DataRegion, category: string): string => `${region}-${category}`;
 const categoriesFor = (region: DataRegion): string[] => region === 'scotland'
   ? SCOTLAND_SCENARIOS.map(({ id }) => id)
-  : ['FZ2', 'FZ3'];
+  : region === 'ireland'
+    ? IRELAND_SCENARIOS.map(({ id }) => id)
+    : ['FZ2', 'FZ3'];
 const categoryColor = (region: DataRegion, category: string): string => {
   if (region === 'scotland') {
     return SCOTLAND_SCENARIOS.find(({ id }) => id === category)?.color ?? FLOOD_ZONE_3_COLOR;
+  }
+  if (region === 'ireland') {
+    return IRELAND_SCENARIOS.find(({ id }) => id === category)?.color ?? FLOOD_ZONE_3_COLOR;
   }
   return category === 'FZ2' ? FLOOD_ZONE_2_COLOR : FLOOD_ZONE_3_COLOR;
 };
@@ -56,9 +69,12 @@ const visibleCategoriesFor = (
   region: DataRegion,
   zones: Record<Zone, boolean>,
   scotlandScenario: ScotlandScenario,
+  irelandScenario: IrelandScenario,
 ): string[] => region === 'scotland'
   ? [scotlandScenario]
-  : (['FZ2', 'FZ3'] as const).filter((zone) => zones[zone]);
+  : region === 'ireland'
+    ? [irelandScenario]
+    : (['FZ2', 'FZ3'] as const).filter((zone) => zones[zone]);
 
 interface RegionConfig {
   label: string;
@@ -71,12 +87,12 @@ interface RegionConfig {
 }
 
 const REGION_CONFIG: RegionConfig = {
-  label: 'Great Britain',
-  bounds: [[-9.6, 49.8], [2, 61.2]],
+  label: 'Britain and Ireland',
+  bounds: [[-11.3, 49.8], [2.1, 61.2]],
   intro: 'Explore flood maps from separate national sources.',
-  title: 'Great Britain flood map',
+  title: 'Britain and Ireland flood map',
   subtitle: 'Separate national flood datasets',
-  searchLabel: 'Find a postcode in England, Wales or Scotland',
+  searchLabel: 'Find a postcode in Great Britain',
   places: [
     { name: 'London', center: [-0.12, 51.5], zoom: 10 },
     { name: 'Ely', center: [0.264, 52.399], zoom: 11 },
@@ -86,6 +102,11 @@ const REGION_CONFIG: RegionConfig = {
     { name: 'Glasgow', center: [-4.25, 55.86], zoom: 11 },
     { name: 'Inverness', center: [-4.23, 57.48], zoom: 11 },
     { name: 'Stornoway', center: [-6.39, 58.21], zoom: 11 },
+    { name: 'Dublin', center: [-6.26, 53.35], zoom: 11 },
+    { name: 'Cork', center: [-8.47, 51.9], zoom: 11 },
+    { name: 'Galway', center: [-9.05, 53.27], zoom: 11 },
+    { name: 'Limerick', center: [-8.63, 52.66], zoom: 11 },
+    { name: 'Waterford', center: [-7.11, 52.26], zoom: 11 },
   ],
 };
 
@@ -111,8 +132,10 @@ const FloodMap = () => {
   const [mapError, setMapError] = useState('');
   const [zones, setZones] = useState<Record<Zone, boolean>>({ FZ2: true, FZ3: true });
   const zonesRef = useRef(zones);
-  const [scotlandScenario, setScotlandScenario] = useState<ScotlandScenario>('SEPA_M');
+  const [scotlandScenario, setScotlandScenario] = useState<ScotlandScenario>('SEPA_H');
   const scotlandScenarioRef = useRef<ScotlandScenario>(scotlandScenario);
+  const [irelandScenario, setIrelandScenario] = useState<IrelandScenario>('IE_100');
+  const irelandScenarioRef = useRef<IrelandScenario>(irelandScenario);
   const [opacity, setOpacity] = useState(65);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [postcode, setPostcode] = useState('');
@@ -268,6 +291,8 @@ const FloodMap = () => {
               ? 'Flood zones © Natural Resources Wales, licensed under OGL'
               : dataset === 'scotland'
                 ? 'Flood extents © SEPA 2025, licensed under OGL v3.0'
+              : dataset === 'ireland'
+                ? 'Contains Office of Public Works information © Office of Public Works'
                 : 'Flood zones © Environment Agency',
           });
           for (const zone of categoriesFor(dataset)) {
@@ -279,7 +304,9 @@ const FloodMap = () => {
               layout: {
                 visibility: dataset === 'scotland'
                   ? (scotlandScenarioRef.current === zone ? 'visible' : 'none')
-                  : zonesRef.current[zone as Zone] ? 'visible' : 'none',
+                  : dataset === 'ireland'
+                    ? (irelandScenarioRef.current === zone ? 'visible' : 'none')
+                    : zonesRef.current[zone as Zone] ? 'visible' : 'none',
               },
               filter: ['==', ['get', 'flood_zone'], zone],
               paint: {
@@ -303,7 +330,7 @@ const FloodMap = () => {
     });
     map.on('click', (event) => {
       const layers = DATASETS.flatMap((dataset) =>
-        visibleCategoriesFor(dataset, zonesRef.current, scotlandScenarioRef.current)
+        visibleCategoriesFor(dataset, zonesRef.current, scotlandScenarioRef.current, irelandScenarioRef.current)
           .map((zone) => layerIdFor(dataset, zone)),
       ).filter((id) => map.getLayer(id));
       if (!layers.length) return;
@@ -320,7 +347,8 @@ const FloodMap = () => {
       }
       const selectedRegion: DataRegion = feature.source.includes('-scotland')
         ? 'scotland'
-        : feature.source.includes('-wales') ? 'wales' : 'england';
+        : feature.source.includes('-ireland') ? 'ireland'
+          : feature.source.includes('-wales') ? 'wales' : 'england';
       setSelection({
         zone: propertyText(selectedRegion === 'scotland'
           ? feature.properties.probability
@@ -330,7 +358,7 @@ const FloodMap = () => {
         source: propertyText(
           feature.properties.flood_source ?? feature.properties.risk,
         ),
-        date: propertyText(feature.properties.pub_date),
+        date: propertyText(feature.properties.pub_date ?? feature.properties.source_date),
         scenario: propertyText(feature.properties.scenario),
         reference: propertyText(feature.properties.reference),
       });
@@ -343,7 +371,7 @@ const FloodMap = () => {
     });
     map.on('mousemove', (event) => {
       const layers = DATASETS.flatMap((dataset) =>
-        visibleCategoriesFor(dataset, zonesRef.current, scotlandScenarioRef.current)
+        visibleCategoriesFor(dataset, zonesRef.current, scotlandScenarioRef.current, irelandScenarioRef.current)
           .map((zone) => layerIdFor(dataset, zone)),
       ).filter((id) => map.getLayer(id));
       map.getCanvas().style.cursor =
@@ -384,7 +412,9 @@ const FloodMap = () => {
         if (!map.getLayer(layerId)) continue;
         const visible = dataset === 'scotland'
           ? scotlandScenario === zone
-          : zones[zone as Zone];
+          : dataset === 'ireland'
+            ? irelandScenario === zone
+            : zones[zone as Zone];
         map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
         map.setPaintProperty(layerId, 'fill-opacity', opacity / 100);
       }
@@ -395,6 +425,10 @@ const FloodMap = () => {
   useEffect(() => {
     scotlandScenarioRef.current = scotlandScenario;
   }, [scotlandScenario]);
+
+  useEffect(() => {
+    irelandScenarioRef.current = irelandScenario;
+  }, [irelandScenario]);
 
   const handleSearch = async (
     event: FormEvent<HTMLFormElement>,
@@ -421,7 +455,7 @@ const FloodMap = () => {
       if (abort.signal.aborted || searchAbort.current !== abort) return;
       const result = data.result;
       if (!['England', 'Wales', 'Scotland'].includes(result?.country))
-        throw new Error('Coverage is England, Wales and Scotland. Enter a postcode in one of these countries.');
+        throw new Error('Postcode search covers Great Britain. Use the place shortcuts to explore Ireland.');
       if (
         !Number.isFinite(result.longitude) ||
         !Number.isFinite(result.latitude)
@@ -490,7 +524,7 @@ const FloodMap = () => {
             ≈
           </span>
           <span>
-            FLOODPLAIN ATLAS<small>England, Wales and Scotland</small>
+            FLOODPLAIN ATLAS<small>Britain and Ireland</small>
           </span>
         </header>
         <div className="sidebar-content">
@@ -525,7 +559,7 @@ const FloodMap = () => {
               </button>
             </div>
             <p className="search-status" role="status">
-              {searchStatus || 'Search powered by postcodes.io · Great Britain'}
+              {searchStatus || 'GB postcodes via postcodes.io · Ireland place shortcuts below'}
             </p>
           </form>
           <div className="place-list" aria-label="Explore a place">
@@ -548,10 +582,10 @@ const FloodMap = () => {
           <section className="layer-section" aria-labelledby="layers-title">
             <div className="section-heading">
               <h2 id="layers-title">Map layers</h2>
-              <span>UK DATASETS</span>
+              <span>REGIONAL DATASETS</span>
             </div>
             <p className="section-note">
-              England and Wales zones stay visible together. Scotland uses SEPA probability scenarios, selected separately.
+              England and Wales zones stay visible together. Scotland uses SEPA probability scenarios and Ireland uses OPW return periods; each is selected separately.
             </p>
             <label className="zone-row">
               <span className="zone-swatch zone-two" />
@@ -599,6 +633,24 @@ const FloodMap = () => {
                 </button>
               ))}
             </div>
+            <div className="scotland-scenarios" role="group" aria-label="Ireland flood scenario">
+              <strong>Ireland · OPW current scenario</strong>
+              {IRELAND_SCENARIOS.map(({ id, label, color }) => (
+                <button
+                  key={id}
+                  type="button"
+                  aria-pressed={irelandScenario === id}
+                  onClick={() => {
+                    irelandScenarioRef.current = id;
+                    setIrelandScenario(id);
+                    setSelection(null);
+                  }}
+                >
+                  <i style={{ backgroundColor: color }} aria-hidden="true" />
+                  {label}
+                </button>
+              ))}
+            </div>
             <div className="opacity-label">
               <label htmlFor="opacity">Overlay opacity</label>
               <output htmlFor="opacity">{opacity}%</output>
@@ -625,15 +677,17 @@ const FloodMap = () => {
               {selection
                 ? selection.region === 'scotland'
                   ? `${selection.zone} probability`
-                  : `Flood Zone ${selection.zone === 'FZ3' ? '3' : '2'}`
+                  : selection.region === 'ireland'
+                    ? `${selection.zone.replace('IE_', '')}-year extent`
+                    : `Flood Zone ${selection.zone === 'FZ3' ? '3' : '2'}`
                 : 'Select an area'}
             </h2>
             {selection ? (
               <dl>
-                <dt>{selection.region === 'scotland' ? 'Probability' : 'Flood zone'}</dt>
+                <dt>{selection.region === 'scotland' ? 'Probability' : selection.region === 'ireland' ? 'Return period' : 'Flood zone'}</dt>
                 <dd>{selection.zone}</dd>
                 <dt>Country</dt>
-                <dd>{selection.region[0].toUpperCase()}{selection.region.slice(1)}</dd>
+                <dd>{selection.region === 'ireland' ? 'Republic of Ireland' : `${selection.region[0].toUpperCase()}${selection.region.slice(1)}`}</dd>
                 <dt>Origin</dt>
                 <dd>{selection.origin}</dd>
                 {selection.region === 'scotland' && <>
@@ -645,6 +699,20 @@ const FloodMap = () => {
                   </>}
                   <dt>SEPA release</dt>
                   <dd>v3.0 · {selection.date}</dd>
+                </>}
+                {selection.region === 'ireland' && <>
+                  <dt>Scenario</dt>
+                  <dd>{selection.scenario}</dd>
+                  <dt>Source</dt>
+                  <dd>{selection.origin}</dd>
+                  {selection.date !== 'Not supplied' && <>
+                    <dt>Source date</dt>
+                    <dd>{selection.date}</dd>
+                  </>}
+                  {selection.reference !== 'Not supplied' && <>
+                    <dt>Area reference</dt>
+                    <dd>{selection.reference}</dd>
+                  </>}
                 </>}
                 {selection.region === 'england' && <>
                   <dt>Flood source</dt>
@@ -665,7 +733,7 @@ const FloodMap = () => {
           <details className="coverage-note">
             <summary>Data, coverage and attribution</summary>
             <p>
-              England, Wales and Scotland use different flood datasets and classifications. Scotland shows one SEPA river and coastal extent scenario at a time; surface-water flooding is not included. Unshaded areas do not guarantee safety. These are strategic and planning layers, not live warnings or property-level assessments.
+              England, Wales, Scotland and the Republic of Ireland use separate datasets and classifications. Scotland and Ireland each show one selected scenario at a time. Ireland return periods combine only source products that publish that period: 20-year is NIFM river; 200-year is coastal; 100-year is CFRAM and NIFM river; 10- and 1,000-year include the available river and coastal products. Colors group source High scenarios in dark blue and Medium/Low in light blue; they do not make the classifications identical. Ireland coverage excludes Northern Ireland. Unshaded areas do not guarantee safety. These are strategic and planning layers, not live warnings or property-level assessments.
             </p>
             <p>Environment Agency — Flood Map for Planning, Flood Zones. Source data date unverified. © Environment Agency copyright and/or database right. All rights reserved.</p>
             <a href="https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47" target="_blank" rel="noreferrer">Environment Agency source description ↗</a>
@@ -677,6 +745,9 @@ const FloodMap = () => {
             <a href="/sources/sepa-river-attribution-v3.pdf" target="_blank" rel="noreferrer">SEPA river dataset attribution statements ↗</a>
             <a href="/sources/sepa-coastal-attribution-v3.pdf" target="_blank" rel="noreferrer">SEPA coastal dataset attribution statements ↗</a>
             <a href="https://www2.sepa.org.uk/FloodData/" target="_blank" rel="noreferrer">SEPA flood data and release notes ↗</a>
+            <p>Republic of Ireland — OPW CFRAM, NIFM and National Coastal Flood Hazard Mapping current-scenario river and coastal extents. Source and return-period distinctions are retained; Northern Ireland is not included.</p>
+            <p>Contains Office of Public Works information © Office of Public Works.</p>
+            <a href="https://www.floodinfo.ie/open-spatial-data-portal/data-catalogue/" target="_blank" rel="noreferrer">OPW open spatial data catalogue ↗</a>
           </details>
           <details className="coverage-note landscape-note">
               <summary>Land and water</summary>
@@ -700,16 +771,16 @@ const FloodMap = () => {
           </details>
         </div>
         <footer className="sidebar-footer">
-            ENGLAND + WALES + SCOTLAND FLOOD DATA
+            ENGLAND + WALES + SCOTLAND + REPUBLIC OF IRELAND FLOOD DATA
           <span>FLOODPLAIN ATLAS © {new Date().getFullYear()}</span>
         </footer>
       </aside>
-      <section className="map-stage" aria-label="Interactive Great Britain flood map">
+      <section className="map-stage" aria-label="Interactive Britain and Ireland flood map">
         <div ref={container} className="map-canvas" />
         <div className="map-title">
           <span className="live-dot" />
           <span>
-            GREAT BRITAIN<strong>{regionConfig.subtitle}</strong>
+            BRITAIN + IRELAND<strong>{regionConfig.subtitle}</strong>
           </span>
         </div>
         <button
@@ -718,7 +789,7 @@ const FloodMap = () => {
             mapRef.current?.fitBounds(regionConfig.bounds, { padding: 35 })
           }
         >
-          ⌖ <span>Great Britain overview</span>
+          ⌖ <span>Britain + Ireland overview</span>
         </button>
         <div
           className={`map-status ${dataError || mapError ? 'has-error' : ''}`}
@@ -742,6 +813,10 @@ const FloodMap = () => {
           <span>
             <i style={{ backgroundColor: categoryColor('scotland', scotlandScenario) }} />
             Scotland: {SCOTLAND_SCENARIOS.find(({ id }) => id === scotlandScenario)?.label}
+          </span>
+          <span>
+            <i style={{ backgroundColor: categoryColor('ireland', irelandScenario) }} />
+            Ireland: {IRELAND_SCENARIOS.find(({ id }) => id === irelandScenario)?.label}
           </span>
           <small>SIMPLIFIED EXTENTS</small>
         </div>

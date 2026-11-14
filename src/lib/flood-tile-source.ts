@@ -156,7 +156,7 @@ class SegmentedFloodTileSource implements Source {
 
 /** Load the segmented archive descriptor; the synthetic key stays stable for PMTiles. */
 export const loadFloodTileSource = async (
-  region: 'england' | 'wales' | 'scotland' = 'england',
+  region: 'england' | 'wales' | 'scotland' | 'ireland' = 'england',
   signal?: AbortSignal,
 ): Promise<Source> => {
   signal?.throwIfAborted();

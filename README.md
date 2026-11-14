@@ -1,8 +1,10 @@
 # Floodplain Atlas
 
-An England map of river and sea Flood Zones 2 and 3, with satellite imagery,
-postcode search and area inspection. Built with React, TypeScript, MapLibre and
-Vite. The production site is served by a Cloudflare Worker at floodplainatlas.com;
+An England, Wales and Scotland map of flood zones and a Republic of Ireland map
+of current-scenario river and coastal return periods, with satellite imagery,
+GB postcode search, Ireland place shortcuts and area inspection. Northern
+Ireland is not covered. Built with React, TypeScript, MapLibre and Vite.
+The production site is served by a Cloudflare Worker at floodplainatlas.com;
 the private flood tile archive is served from R2. Vercel remains available as
 the rollback deployment.
 
