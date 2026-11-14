@@ -20,6 +20,15 @@ body {
   font-size: 14px;
   line-height: 1.65;
 }
+.search-context summary {
+  width: fit-content;
+  color: #176b70;
+  cursor: pointer;
+  text-underline-offset: 3px;
+}
+.search-context section {
+  padding-top: 18px;
+}
 .search-context h2 {
   margin: 0 0 8px;
   color: #102b3a;
