@@ -12,6 +12,34 @@
 body {
   margin: 0;
 }
+.search-context {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 24px 36px;
+  color: #34505d;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.search-context h2 {
+  margin: 0 0 8px;
+  color: #102b3a;
+  font-family: Manrope, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+}
+.search-context p {
+  margin: 8px 0;
+}
+.search-context nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 14px;
+}
+.search-context a {
+  color: #176b70;
+  text-underline-offset: 3px;
+}
 button,
 input {
   font: inherit;

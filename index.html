@@ -18,20 +18,20 @@
         border: 0;
       }
     </style>
-    <meta name="description" content="Explore separate river, coastal and planning flood datasets for England, Wales, Scotland and the Republic of Ireland. Northern Ireland is not yet included." />
+    <meta name="description" content="Flood maps for England, Wales and Scotland, plus river and coastal scenarios for the Republic of Ireland. Northern Ireland is not yet covered." />
     <link rel="canonical" href="https://floodplainatlas.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Floodplain Atlas" />
-    <meta property="og:title" content="Floodplain Atlas: Britain & Republic of Ireland Flood Map" />
-    <meta property="og:description" content="Explore separate river, coastal and planning flood datasets for England, Wales, Scotland and the Republic of Ireland. Northern Ireland is not yet included." />
+    <meta property="og:title" content="Britain Flood Map | England, Scotland & Wales | Floodplain Atlas" />
+    <meta property="og:description" content="Flood maps for England, Wales and Scotland, plus river and coastal scenarios for the Republic of Ireland. Northern Ireland is not yet covered." />
     <meta property="og:url" content="https://floodplainatlas.com/" />
     <meta property="og:image" content="https://floodplainatlas.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Floodplain Atlas flood map covering Great Britain and the Republic of Ireland." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Floodplain Atlas: Britain & Republic of Ireland Flood Map" />
-    <meta name="twitter:description" content="Explore separate river, coastal and planning flood datasets for England, Wales, Scotland and the Republic of Ireland. Northern Ireland is not yet included." />
+    <meta name="twitter:title" content="Britain Flood Map | England, Scotland & Wales | Floodplain Atlas" />
+    <meta name="twitter:description" content="Flood maps for England, Wales and Scotland, plus river and coastal scenarios for the Republic of Ireland. Northern Ireland is not yet covered." />
     <meta name="twitter:image" content="https://floodplainatlas.com/og-image.png" />
     <meta name="twitter:image:alt" content="Floodplain Atlas flood map covering Great Britain and the Republic of Ireland." />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
@@ -49,22 +49,33 @@
         "@type": "WebApplication",
         "name": "Floodplain Atlas",
         "url": "https://floodplainatlas.com/",
-        "description": "An interactive map of separate river, coastal and planning flood datasets for England, Wales, Scotland and the Republic of Ireland. Northern Ireland is not yet included.",
+        "description": "Flood maps for England, Wales and Scotland, plus river and coastal scenarios for the Republic of Ireland. Northern Ireland is not yet covered.",
         "applicationCategory": "MappingApplication",
         "operatingSystem": "Any"
       }
     </script>
-    <title>Floodplain Atlas: Britain &amp; Republic of Ireland Flood Map</title>
+    <title>Britain Flood Map | England, Scotland &amp; Wales | Floodplain Atlas</title>
   </head>
   <body>
     <div id="root">
       <main class="seo-fallback">
-        <h1>Britain and Republic of Ireland flood map</h1>
-        <p>Explore separate river, coastal and planning flood datasets for England, Wales, Scotland and the Republic of Ireland. Northern Ireland is not yet included.</p>
-        <p>Planning zones and probability scenarios use different methods. The map does not show live warnings or provide a property-level assessment.</p>
-        <p>Sources: <a href="https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47">Environment Agency</a>, <a href="https://datamap.gov.wales/layergroups/inspire-nrw:FloodMapforPlanningFloodZones2and3/metadata_detail">Natural Resources Wales</a>, <a href="https://www2.sepa.org.uk/FloodData/">SEPA</a>, and the <a href="https://www.floodinfo.ie/open-spatial-data-portal/data-catalogue/">OPW flood data catalogue</a>.</p>
+        <h1>Flood maps for Britain: England, Wales and Scotland</h1>
+        <p>Floodplain Atlas brings separate national datasets into one interactive map. England and Wales show Flood Zones 2 and 3; Scotland shows SEPA river and coastal scenarios; the Republic of Ireland shows OPW current-scenario extents. Northern Ireland is not yet covered.</p>
+        <p>Classifications differ between sources. This is a broad exploration map, not an official planning service, live warning map or property-level assessment.</p>
+        <p>Official sources: <a href="https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47">Environment Agency</a>, <a href="https://datamap.gov.wales/layergroups/inspire-nrw:FloodMapforPlanningFloodZones2and3/metadata_detail">Natural Resources Wales</a>, <a href="https://www2.sepa.org.uk/FloodData/">SEPA</a>, and the <a href="https://www.floodinfo.ie/open-spatial-data-portal/data-catalogue/">OPW flood data catalogue</a>.</p>
       </main>
     </div>
+    <main class="search-context" aria-labelledby="search-context-title">
+      <h2 id="search-context-title">Flood maps for England, Wales, Scotland and Ireland</h2>
+      <p>Compare separate national flood datasets in one interactive map. England and Wales use Flood Zones 2 and 3. Scotland uses SEPA probability scenarios. The Republic of Ireland uses OPW river and coastal scenarios; Northern Ireland is not yet covered.</p>
+      <p>Each source uses its own method and classification. Use the official agency maps for planning decisions, live warnings or detailed property checks.</p>
+      <nav aria-label="Official flood map sources">
+        <a href="https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47">England — Environment Agency</a>
+        <a href="https://datamap.gov.wales/layergroups/inspire-nrw:FloodMapforPlanningFloodZones2and3/metadata_detail">Wales — Natural Resources Wales</a>
+        <a href="https://www2.sepa.org.uk/FloodData/">Scotland — SEPA</a>
+        <a href="https://www.floodinfo.ie/open-spatial-data-portal/data-catalogue/">Republic of Ireland — OPW</a>
+      </nav>
+    </main>
     <noscript>Floodplain Atlas needs JavaScript to display the interactive Britain and Ireland flood map.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
