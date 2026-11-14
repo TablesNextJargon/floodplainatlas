@@ -87,10 +87,10 @@ interface RegionConfig {
 }
 
 const REGION_CONFIG: RegionConfig = {
-  label: 'Britain and Ireland',
+  label: 'Britain and the Republic of Ireland',
   bounds: [[-11.3, 49.8], [2.1, 61.2]],
   intro: 'Explore flood maps from separate national sources.',
-  title: 'Britain and Ireland flood map',
+  title: 'Britain and Republic of Ireland flood map',
   subtitle: 'Separate national flood datasets',
   searchLabel: 'Find a postcode in Great Britain',
   places: [
