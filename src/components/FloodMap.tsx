@@ -134,7 +134,7 @@ const FloodMap = () => {
   const zonesRef = useRef(zones);
   const [scotlandScenario, setScotlandScenario] = useState<ScotlandScenario>('SEPA_H');
   const scotlandScenarioRef = useRef<ScotlandScenario>(scotlandScenario);
-  const [irelandScenario, setIrelandScenario] = useState<IrelandScenario>('IE_100');
+  const [irelandScenario, setIrelandScenario] = useState<IrelandScenario>('IE_10');
   const irelandScenarioRef = useRef<IrelandScenario>(irelandScenario);
   const [opacity, setOpacity] = useState(65);
   const [selection, setSelection] = useState<Selection | null>(null);
@@ -420,7 +420,7 @@ const FloodMap = () => {
       }
     }
     setSelection(null);
-  }, [zones, scotlandScenario, opacity, dataReady]);
+  }, [zones, scotlandScenario, irelandScenario, opacity, dataReady]);
 
   useEffect(() => {
     scotlandScenarioRef.current = scotlandScenario;
