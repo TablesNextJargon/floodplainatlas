@@ -156,10 +156,12 @@ class SegmentedFloodTileSource implements Source {
 
 /** Load the segmented archive descriptor; the synthetic key stays stable for PMTiles. */
 export const loadFloodTileSource = async (
+  region: 'england' | 'wales' = 'england',
   signal?: AbortSignal,
 ): Promise<Source> => {
   signal?.throwIfAborted();
-  const manifestUrl = new URL('/data/flood-zones.json', window.location.origin);
+  const archiveName = region === 'wales' ? 'wales-flood-zones' : 'flood-zones';
+  const manifestUrl = new URL(`/data/${archiveName}.json`, window.location.origin);
   const response = await fetch(manifestUrl.href, {
     signal,
     redirect: 'error',
@@ -173,6 +175,6 @@ export const loadFloodTileSource = async (
   const value: unknown = await response.json();
   signal?.throwIfAborted();
   const manifest = validateManifest(value, manifestUrl);
-  const key = new URL('/data/flood-zones.pmtiles', manifestUrl).href;
+  const key = new URL(`/data/${archiveName}.pmtiles`, manifestUrl).href;
   return new SegmentedFloodTileSource(manifest, key);
 };

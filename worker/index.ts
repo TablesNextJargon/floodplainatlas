@@ -1,7 +1,9 @@
 /// <reference path="../.cloudflare/types/index.d.ts" />
 
-const MANIFEST_KEY = 'flood-zones.json';
+const MANIFEST_KEYS = new Set(['flood-zones.json', 'wales-flood-zones.json']);
 const CHUNK_COUNT = 14;
+const WALES_CHUNK_PREFIX = 'f13a6c083270';
+const WALES_CHUNK_COUNT = 2;
 
 interface ByteRange {
   start: number;
@@ -9,7 +11,7 @@ interface ByteRange {
 }
 
 const cacheControlFor = (key: string): string =>
-  key === MANIFEST_KEY
+  MANIFEST_KEYS.has(key)
     ? 'public, max-age=3600'
     : 'public, max-age=31536000, immutable';
 
@@ -42,9 +44,13 @@ const parseRange = (header: string, size: number): ByteRange | null => {
 };
 
 const isAllowedKey = (key: string): boolean => {
-  if (key === MANIFEST_KEY) return true;
-  const match = /^flood-zones-7d0c6cc226b8-(\d{3})\.bin$/.exec(key);
-  return Boolean(match && Number(match[1]) < CHUNK_COUNT);
+  if (MANIFEST_KEYS.has(key)) return true;
+  const england = /^flood-zones-7d0c6cc226b8-(\d{3})\.bin$/.exec(key);
+  if (england) return Number(england[1]) < CHUNK_COUNT;
+  const wales = new RegExp(
+    `^wales-flood-zones-${WALES_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
+  ).exec(key);
+  return Boolean(wales && Number(wales[1]) < WALES_CHUNK_COUNT);
 };
 
 const errorResponse = (status: number, headers?: HeadersInit): Response =>
@@ -67,7 +73,7 @@ const serveFloodData = async (
     'Accept-Ranges': 'bytes',
     'Cache-Control': cacheControlFor(key),
     'Content-Length': String(size),
-    'Content-Type': key === MANIFEST_KEY ? 'application/json; charset=utf-8' : 'application/octet-stream',
+    'Content-Type': MANIFEST_KEYS.has(key) ? 'application/json; charset=utf-8' : 'application/octet-stream',
     ETag: etag,
   });
 
