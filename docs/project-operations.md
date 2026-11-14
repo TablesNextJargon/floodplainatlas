@@ -5,7 +5,7 @@
 - Repository: `TablesNextJargon/floodplainatlas`, checked out at `~/floodplainatlas`.
 - Public site: <https://floodplainatlas.com>.
 - Stack: React, TypeScript, Vite, MapLibre, and PMTiles.
-- Production currently shows Environment Agency river and sea Flood Zones 2 and 3 for England, Natural Resources Wales planning zones for Wales, and SEPA v3.0 river/coastal extent scenarios for Scotland. The local release adds OPW current-scenario river/coastal return periods for the Republic of Ireland as a separate dataset. Ireland coverage excludes Northern Ireland; Scotland surface-water products are not included.
+- Production shows Environment Agency river and sea Flood Zones 2 and 3 for England, Natural Resources Wales planning zones for Wales, SEPA v3.0 river/coastal extent scenarios for Scotland, and OPW current-scenario river/coastal return periods for the Republic of Ireland. Ireland coverage excludes Northern Ireland; Scotland surface-water products are not included.
 - Product stance: keep copy short, neutral, and descriptive. The map can prompt questions about land and wetland change; do not claim flood zones identify historic wetlands or restoration suitability.
 
 ## Hosting and data path
@@ -14,7 +14,7 @@ Production is a Cloudflare Worker named `floodplainatlas`, attached directly to 
 
 The England archive uses `england-flood-zones.json` and 14 chunks with hash prefix `7d0c6cc226b8`. The Worker accepts either the old or country-prefixed England R2 object names during the rename. Wales uses `wales-flood-zones.json` and two chunks with prefix `f13a6c083270`; Scotland uses `scotland-flood-zones.json` and four chunks with prefix `1490b5ac469f`; Ireland uses `ireland-flood-zones.json` and five chunks with prefix `72c20b41734b`. `worker/index.ts` pins each hash and count. Keep each manifest with its matching chunks and verify range behavior (`206` with `Content-Range`) after deployments.
 
-Scotland's prepared R2 package and production verification are documented in [scotland-data-notes.md](scotland-data-notes.md). Production returns the expected manifest and all four chunks; the first chunk was verified with a `206` byte-range response. Ireland's source processing, caveats, local upload files and pending publication checks are documented in [ireland-data-notes.md](ireland-data-notes.md).
+Scotland's prepared R2 package and production verification are documented in [scotland-data-notes.md](scotland-data-notes.md). Production returns the expected manifest and all four chunks; the first chunk was verified with a `206` byte-range response. Ireland's source processing, caveats and production verification are documented in [ireland-data-notes.md](ireland-data-notes.md).
 
 R2 keeps the large data objects out of Vercel's deployment bundle, but each `/data/*` request invokes the Worker and accesses R2. Watch Cloudflare usage on the free plan; if limits are approached, consider cache behavior and delivery architecture before changing providers. Do not expose the bucket publicly as a workaround.
 
@@ -55,7 +55,7 @@ To bring an existing pane up to date, give it the repository path and ask it to 
 
 - Keep each country's data scope and limitations clear; national datasets and classification schemes must be validated and described separately.
 - Wales is now part of production through a separate archive. Read [the Wales preview and deployment handoff](wales-preview-validation.md) before repeating feasibility work or changing its data.
-- Scotland's local archive and combined-map UI are deployed. The live manifest reports the expected archive SHA-256 and size; all four chunks return their expected lengths and the first chunk returns a valid `206` range response. Ireland's application integration and R2 allowlist are prepared locally; publish only after the six files in [ireland-data-notes.md](ireland-data-notes.md) have been uploaded and verified.
+- Scotland's local archive and combined-map UI are deployed. The live manifest reports the expected archive SHA-256 and size; all four chunks return their expected lengths and the first chunk returns a valid `206` range response. Ireland is deployed in release `49c909c`; the live manifest matches the expected SHA-256 and size, and all five chunks return valid `206` range responses.
 - Confirm flood-data source date, licence, and required attribution with the supplier; see [data notes](flood-data-notes.md).
 - Use Google Search Console for indexing, query, and coverage baselines. Keep SEO copy concise and tied to what the map actually shows.
 - Manually verify the live map, satellite basemap option, map controls, and flood-data loading after production releases.

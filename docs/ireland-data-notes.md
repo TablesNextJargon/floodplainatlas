@@ -21,7 +21,11 @@ OPW gave permission for adaptation and public hosting, as confirmed by the proje
 
 The converted build contains 535,003 source features. The PMTiles archive is 141,438,789 bytes with SHA-256 `72c20b41734b5b1309d45f8c33389c03dce465b5fcabb904d8543503b3db092b`. Five 32 MiB-or-smaller chunks and a manifest are in `/home/hadow/floodplainatlas-r2-upload/ireland/`.
 
-During conversion, GDAL corrected ring winding while reading. Shapely reported 7,014 invalid geometries among the source features and no null geometries. Tippecanoe accepted all features, but invalid source shapes were not repaired or individually reviewed. This should be considered when interpreting boundaries; the national-scale map is not a property-level or parcel-boundary assessment. The local archive has not yet been uploaded or deployed.
+During conversion, GDAL corrected ring winding while reading. Shapely reported 7,014 invalid geometries among the source features and no null geometries. Tippecanoe accepted all features, but invalid source shapes were not repaired or individually reviewed. This should be considered when interpreting boundaries; the national-scale map is not a property-level or parcel-boundary assessment.
+
+## Production status
+
+The owner confirmed the six files were uploaded to the root of `floodplainatlas-data`. Release commit `49c909c` was deployed to the production Worker on 2026-11-14. The live manifest reports the expected archive SHA-256 and size. All five chunks returned HTTP 206 for a one-byte range request, with the expected per-chunk lengths in `Content-Range`.
 
 ## R2 upload bundle
 
@@ -34,4 +38,4 @@ Upload these six files to the root of the private `floodplainatlas-data` bucket,
 5. `ireland-flood-zones-72c20b41734b-003.bin`
 6. `ireland-flood-zones-72c20b41734b-004.bin`
 
-The Worker allowlist pins the manifest key, hash prefix and five chunk indexes. After upload, verify the manifest size/version and byte ranges before deploying the app. Do not upload the source ZIP archives.
+The Worker allowlist pins the manifest key, hash prefix and five chunk indexes. Do not upload the source ZIP archives.
