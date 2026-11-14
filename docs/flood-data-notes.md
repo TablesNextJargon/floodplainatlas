@@ -22,7 +22,7 @@ Conversion is an offline task, separate from the application build.
 
 The completed PMTiles archive exceeds 100 MB. Static delivery splits its bytes
 into files of at most **32 MiB**, referenced by the manifest at
-`/data/flood-zones.json`. The client requests the segments needed to read the
+`/data/england-flood-zones.json`. The client requests the segments needed to read the
 archive. Segmentation changes storage and retrieval, not the tile geometry;
 keep the manifest and every referenced segment from the same build together.
 The original national GeoJSON is not served to browsers.

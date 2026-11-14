@@ -265,6 +265,46 @@ h1 em {
   height: 5px;
   cursor: pointer;
 }
+.scotland-scenarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 15px 0 3px;
+}
+.scotland-scenarios > strong {
+  flex: 0 0 100%;
+  font-size: 11px;
+  font-weight: 500;
+  color: #d7e4e8;
+  margin-bottom: 2px;
+}
+.scotland-scenarios button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid #ffffff35;
+  border-radius: 5px;
+  color: #c8d8de;
+  background: #ffffff08;
+  font-size: 10px;
+  cursor: pointer;
+}
+.scotland-scenarios button[aria-pressed='true'] {
+  color: #fff;
+  border-color: #79deca;
+  background: #ffffff18;
+}
+.scotland-scenarios button:focus-visible {
+  outline: 2px solid #79deca;
+  outline-offset: 2px;
+}
+.scotland-scenarios i {
+  width: 9px;
+  height: 9px;
+  display: inline-block;
+  border-radius: 50%;
+}
 .feature-card {
   padding: 19px;
   background: #1b3a48;

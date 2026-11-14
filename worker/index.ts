@@ -1,9 +1,17 @@
 /// <reference path="../.cloudflare/types/index.d.ts" />
 
-const MANIFEST_KEYS = new Set(['flood-zones.json', 'wales-flood-zones.json']);
-const CHUNK_COUNT = 14;
+const MANIFEST_KEYS = new Set([
+  'flood-zones.json',
+  'england-flood-zones.json',
+  'wales-flood-zones.json',
+  'scotland-flood-zones.json',
+]);
+const ENGLAND_CHUNK_PREFIX = '7d0c6cc226b8';
+const ENGLAND_CHUNK_COUNT = 14;
 const WALES_CHUNK_PREFIX = 'f13a6c083270';
 const WALES_CHUNK_COUNT = 2;
+const SCOTLAND_CHUNK_PREFIX = '1490b5ac469f';
+const SCOTLAND_CHUNK_COUNT = 4;
 
 interface ByteRange {
   start: number;
@@ -45,12 +53,35 @@ const parseRange = (header: string, size: number): ByteRange | null => {
 
 const isAllowedKey = (key: string): boolean => {
   if (MANIFEST_KEYS.has(key)) return true;
-  const england = /^flood-zones-7d0c6cc226b8-(\d{3})\.bin$/.exec(key);
-  if (england) return Number(england[1]) < CHUNK_COUNT;
+  const oldEngland = new RegExp(
+    `^flood-zones-${ENGLAND_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
+  ).exec(key);
+  if (oldEngland && Number(oldEngland[1]) < ENGLAND_CHUNK_COUNT) return true;
+  const england = new RegExp(
+    `^england-flood-zones-${ENGLAND_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
+  ).exec(key);
+  if (england && Number(england[1]) < ENGLAND_CHUNK_COUNT) return true;
   const wales = new RegExp(
     `^wales-flood-zones-${WALES_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
   ).exec(key);
-  return Boolean(wales && Number(wales[1]) < WALES_CHUNK_COUNT);
+  if (wales && Number(wales[1]) < WALES_CHUNK_COUNT) return true;
+  const scotland = new RegExp(
+    `^scotland-flood-zones-${SCOTLAND_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
+  ).exec(key);
+  return Boolean(scotland && Number(scotland[1]) < SCOTLAND_CHUNK_COUNT);
+};
+
+// Preserve the old public paths during browser-cache rollover while storing
+// England's renamed objects under their explicit country-prefixed keys.
+const storageKeyFor = (key: string): string => {
+  if (key === 'flood-zones.json') return 'england-flood-zones.json';
+  const oldEnglandChunk = new RegExp(
+    `^flood-zones-${ENGLAND_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
+  ).exec(key);
+  if (oldEnglandChunk) {
+    return `england-flood-zones-${ENGLAND_CHUNK_PREFIX}-${oldEnglandChunk[1]}.bin`;
+  }
+  return key;
 };
 
 const errorResponse = (status: number, headers?: HeadersInit): Response =>
@@ -62,6 +93,7 @@ const serveFloodData = async (
   key: string,
 ): Promise<Response> => {
   if (!isAllowedKey(key)) return errorResponse(404);
+  const storageKey = storageKeyFor(key);
   if (request.method === 'OPTIONS') {
     return errorResponse(204, { Allow: 'GET, HEAD, OPTIONS' });
   }
@@ -78,21 +110,21 @@ const serveFloodData = async (
   });
 
   if (request.method === 'HEAD') {
-    const object = await bucket.head(key);
+    const object = await bucket.head(storageKey);
     if (!object) return errorResponse(404);
     return new Response(null, { headers: headersFor(object.size, object.httpEtag) });
   }
 
   const rangeHeader = request.headers.get('Range');
   if (!rangeHeader) {
-    const fullObject = await bucket.get(key);
+    const fullObject = await bucket.get(storageKey);
     if (!fullObject?.body) return errorResponse(404);
     return new Response(fullObject.body, {
       headers: headersFor(fullObject.size, fullObject.httpEtag),
     });
   }
 
-  const object = await bucket.head(key);
+  const object = await bucket.head(storageKey);
   if (!object) return errorResponse(404);
   const range = parseRange(rangeHeader, object.size);
   if (!range) {
@@ -103,7 +135,7 @@ const serveFloodData = async (
   }
 
   const length = range.end - range.start + 1;
-  const rangedObject = await bucket.get(key, {
+  const rangedObject = await bucket.get(storageKey, {
     range: { offset: range.start, length },
   });
   if (!rangedObject?.body) return errorResponse(404);

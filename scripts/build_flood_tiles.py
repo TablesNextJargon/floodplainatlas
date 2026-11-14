@@ -34,7 +34,7 @@ def main():
     started = time.monotonic()
     subprocess.run(command, check=True)
     # Publish only a completed archive. Keep the source out of public/ and Git.
-    manifest = publish(output, root / 'public/data')
+    manifest = publish(output, root / 'public/data', 'england-flood-zones')
     report = {'source_file': source.name, 'source_bytes': source.stat().st_size,
               'archive_bytes': manifest['size'], 'archive_sha256': manifest['version'],
               'source_layer': 'flood_zones',
