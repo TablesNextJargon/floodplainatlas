@@ -5,7 +5,7 @@
 - Repository: `TablesNextJargon/floodplainatlas`, checked out at `~/floodplainatlas`.
 - Public site: <https://floodplainatlas.com>.
 - Stack: React, TypeScript, Vite, MapLibre, and PMTiles.
-- Current coverage: Environment Agency river and sea Flood Zones 2 and 3 for England, plus Natural Resources Wales planning zones for rivers and sea in Wales. They are separate datasets and classifications; this is not UK-wide or property-level risk information.
+- Current coverage: Environment Agency river and sea Flood Zones 2 and 3 for England, plus Natural Resources Wales planning zones for rivers and sea in Wales. Both appear together in one map view, with shared zone and opacity controls. They remain separate datasets and classifications; this is not UK-wide or property-level risk information.
 - Product stance: keep copy short, neutral, and descriptive. The map can prompt questions about land and wetland change; do not claim flood zones identify historic wetlands or restoration suitability.
 
 ## Hosting and data path

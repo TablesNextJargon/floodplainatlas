@@ -31,7 +31,7 @@ The preview used separate River and Sea records, normalized zone values to
 `FZ2`/`FZ3`, and kept a source field. Wales planning zones include climate-change
 allowances and must be described separately from England's EA zones.
 
-The source-processing pipeline and lazy Wales source selection are deployed.
+The source-processing pipeline and lazy Wales source loading are deployed. England and Wales now appear together in one map view; there are no country-only views. The sources and their classifications remain separately identified when inspecting features and in the attribution details.
 The generated PMTiles header reports bounds `[-5.353493, 51.377862,
 -2.6497989, 53.430997]`, confirming the archive covers Wales despite the
 metadata's `Region=Global` label. It contains 324,163 River and 30,743 Sea
