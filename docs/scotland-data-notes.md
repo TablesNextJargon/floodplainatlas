@@ -63,7 +63,8 @@ validation.
 The generated PMTiles archive is 127,558,469 bytes with SHA-256
 `1490b5ac469f1840547cda969d3b9504981c7d1bd1d22be99317a96ee9189312`. The
 manifest and four chunks are in `/tmp/floodplainatlas-scotland-upload-ready/`.
-The user has uploaded those five files to the root of `floodplainatlas-data`.
-The Worker allowlist and app integration are prepared in source. Verify the
-manifest and ranged chunk responses on production after the combined release
-before confirming Scotland live.
+The user uploaded those five files to the root of `floodplainatlas-data`. The
+Scotland-enabled Worker and map UI are live on `floodplainatlas.com`. Production
+returns this manifest with the expected SHA-256 and size; all four chunks return
+their expected content lengths, and a byte-range request to chunk 000 returns
+HTTP 206 with the expected `Content-Range`.

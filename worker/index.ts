@@ -71,17 +71,28 @@ const isAllowedKey = (key: string): boolean => {
   return Boolean(scotland && Number(scotland[1]) < SCOTLAND_CHUNK_COUNT);
 };
 
-// Preserve the old public paths during browser-cache rollover while storing
-// England's renamed objects under their explicit country-prefixed keys.
-const storageKeyFor = (key: string): string => {
-  if (key === 'flood-zones.json') return 'england-flood-zones.json';
+// Support either R2 naming convention while the England archive rename is
+// completed. Prefer the country-prefixed object when both copies exist.
+const storageKeysFor = (key: string): string[] => {
+  if (key === 'flood-zones.json' || key === 'england-flood-zones.json') {
+    return ['england-flood-zones.json', 'flood-zones.json'];
+  }
   const oldEnglandChunk = new RegExp(
     `^flood-zones-${ENGLAND_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
   ).exec(key);
   if (oldEnglandChunk) {
-    return `england-flood-zones-${ENGLAND_CHUNK_PREFIX}-${oldEnglandChunk[1]}.bin`;
+    return [
+      `england-flood-zones-${ENGLAND_CHUNK_PREFIX}-${oldEnglandChunk[1]}.bin`,
+      key,
+    ];
   }
-  return key;
+  const newEnglandChunk = new RegExp(
+    `^england-flood-zones-${ENGLAND_CHUNK_PREFIX}-(\\d{3})\\.bin$`,
+  ).exec(key);
+  if (newEnglandChunk) {
+    return [key, `flood-zones-${ENGLAND_CHUNK_PREFIX}-${newEnglandChunk[1]}.bin`];
+  }
+  return [key];
 };
 
 const errorResponse = (status: number, headers?: HeadersInit): Response =>
@@ -93,7 +104,6 @@ const serveFloodData = async (
   key: string,
 ): Promise<Response> => {
   if (!isAllowedKey(key)) return errorResponse(404);
-  const storageKey = storageKeyFor(key);
   if (request.method === 'OPTIONS') {
     return errorResponse(204, { Allow: 'GET, HEAD, OPTIONS' });
   }
@@ -109,9 +119,18 @@ const serveFloodData = async (
     ETag: etag,
   });
 
+  let storageKey: string | undefined;
+  let object: R2Object | null = null;
+  for (const candidate of storageKeysFor(key)) {
+    object = await bucket.head(candidate);
+    if (object) {
+      storageKey = candidate;
+      break;
+    }
+  }
+  if (!object || !storageKey) return errorResponse(404);
+
   if (request.method === 'HEAD') {
-    const object = await bucket.head(storageKey);
-    if (!object) return errorResponse(404);
     return new Response(null, { headers: headersFor(object.size, object.httpEtag) });
   }
 
@@ -124,8 +143,6 @@ const serveFloodData = async (
     });
   }
 
-  const object = await bucket.head(storageKey);
-  if (!object) return errorResponse(404);
   const range = parseRange(rangeHeader, object.size);
   if (!range) {
     const headers = headersFor(object.size, object.httpEtag);
