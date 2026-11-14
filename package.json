@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 4322",
     "build": "tsc --noEmit && vite build",
+    "build:vercel": "npm run build && node scripts/strip-vercel-data.mjs",
     "build:cloudflare:preview": "cf build --mode preview && tsc -p tsconfig.cloudflare.json",
     "build:cloudflare:production": "cf build --mode cloudflare && tsc -p tsconfig.cloudflare.json",
     "typecheck:cloudflare": "cf build --mode cloudflare && tsc -p tsconfig.cloudflare.json",
