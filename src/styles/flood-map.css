@@ -305,6 +305,40 @@ h1 em {
   display: inline-block;
   border-radius: 50%;
 }
+.scenario-help {
+  margin-top: 14px;
+  border-top: 1px solid #ffffff1b;
+  padding-top: 11px;
+  color: #d7e4e8;
+}
+.scenario-help summary {
+  width: fit-content;
+  color: #a9dcd3;
+  font-size: 11px;
+  cursor: pointer;
+}
+.scenario-help summary:focus-visible,
+.scenario-help-content button:focus-visible {
+  outline: 2px solid #79deca;
+  outline-offset: 3px;
+}
+.scenario-help-content {
+  padding-top: 4px;
+}
+.scenario-help-content p {
+  color: #b9cbd2;
+  font-size: 10px;
+  line-height: 1.65;
+  margin: 9px 0;
+}
+.scenario-help-content button {
+  border: 0;
+  padding: 3px 0;
+  color: #79deca;
+  background: transparent;
+  font-size: 10px;
+  text-align: left;
+}
 .feature-card {
   padding: 19px;
   background: #1b3a48;

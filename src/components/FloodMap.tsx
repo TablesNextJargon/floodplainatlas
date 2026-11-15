@@ -650,6 +650,23 @@ const FloodMap = () => {
                 </button>
               ))}
             </div>
+            <details className="scenario-help">
+              <summary>What do these labels mean?</summary>
+              <div className="scenario-help-content">
+                <p>
+                  A return period describes the chance in any one year: 1 in 100 means a 1% chance, not a flood scheduled once every 100 years. Longer return periods describe less frequent, more severe scenarios.
+                </p>
+                <p>
+                  Flood Zone 2 indicates lower probability than Zone 3, though their planning definitions vary by country. Scotland and Ireland let you select a likelihood scenario. The datasets are not directly comparable, and shading shows an extent, not flood depth or a property-level assessment.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => aboutDialog.current?.showModal()}
+                >
+                  Country details and data sources <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </details>
             <div className="opacity-label">
               <label htmlFor="opacity">Overlay opacity</label>
               <output htmlFor="opacity">{opacity}%</output>
