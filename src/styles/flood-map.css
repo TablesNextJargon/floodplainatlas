@@ -12,6 +12,40 @@
 body {
   margin: 0;
 }
+.search-context {
+  padding: 13px 24px;
+  border-top: 1px solid #dce4df;
+  background: #edf1ed;
+  color: #38515b;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.search-context > summary {
+  max-width: 1100px;
+  margin: 0 auto;
+  color: #102b3a;
+  cursor: pointer;
+  font-weight: 600;
+}
+.search-context > summary:focus-visible {
+  outline: 3px solid #e6ae58;
+  outline-offset: 4px;
+}
+.search-context-content {
+  max-width: 1100px;
+  margin: 12px auto 0;
+}
+.search-context-content p {
+  margin: 0 0 9px;
+}
+.search-context-content nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+.search-context-content a {
+  color: #102b3a;
+}
 button,
 input {
   font: inherit;
