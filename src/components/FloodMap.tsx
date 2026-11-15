@@ -119,6 +119,7 @@ const FloodMap = () => {
   const container = useRef<HTMLDivElement>(null);
   const toolsPanel = useRef<HTMLElement>(null);
   const detailsPanel = useRef<HTMLElement>(null);
+  const aboutDialog = useRef<HTMLDialogElement>(null);
   const mapRef = useRef<Map | null>(null);
   const markerRef = useRef<Marker | null>(null);
   const searchAbort = useRef<AbortController | null>(null);
@@ -728,45 +729,6 @@ const FloodMap = () => {
               </p>
             )}
           </section>
-          <details className="coverage-note">
-            <summary>Data, coverage and attribution</summary>
-            <p>
-              England, Wales, Scotland and the Republic of Ireland use separate datasets and classifications. Scotland and Ireland each show one selected scenario at a time. Ireland return periods combine only source products that publish that period: 20-year is NIFM river; 200-year is coastal; 100-year is CFRAM and NIFM river; 10- and 1,000-year include the available river and coastal products. Ireland's 100-year Medium scenario uses the dark blue of England's Flood Zone 3; other Ireland scenarios use teal. Colors do not make the classifications identical. Ireland coverage excludes Northern Ireland. Unshaded areas do not guarantee safety. These are strategic and planning layers, not live warnings or property-level assessments.
-            </p>
-            <p>Environment Agency — Flood Map for Planning, Flood Zones. Source data date unverified. © Environment Agency copyright and/or database right. All rights reserved.</p>
-            <a href="https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47" target="_blank" rel="noreferrer">Environment Agency source description ↗</a>
-            <p>Natural Resources Wales — Flood Map for Planning, River and Sea Flood Zones 2 and 3. Publication date: 21 May 2026. Includes climate-change allowances; assumes no defences.</p>
-            <p>Contains Natural Resources Wales information © Natural Resources Wales and database right. All rights reserved. Some features of this information are based on digital spatial data licensed from the UK Centre for Ecology &amp; Hydrology © UKCEH. Defra, Met Office and DARD Rivers Agency © Crown copyright. © Cranfield University. © James Hutton Institute. Contains OS data © Crown copyright and database right.</p>
-            <a href="https://datamap.gov.wales/layergroups/inspire-nrw:FloodMapforPlanningFloodZones2and3/metadata_detail" target="_blank" rel="noreferrer">NRW data and attribution ↗</a>
-            <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noreferrer">Open Government Licence v3 ↗</a>
-            <p>Scottish Environment Protection Agency — Flood Map v3.0 river and coastal extents, published 25 February 2025. © SEPA 2025; licensed under the Open Government Licence 3.0.</p>
-            <a href="/sources/sepa-river-attribution-v3.pdf" target="_blank" rel="noreferrer">SEPA river dataset attribution statements ↗</a>
-            <a href="/sources/sepa-coastal-attribution-v3.pdf" target="_blank" rel="noreferrer">SEPA coastal dataset attribution statements ↗</a>
-            <a href="https://www2.sepa.org.uk/FloodData/" target="_blank" rel="noreferrer">SEPA flood data and release notes ↗</a>
-            <p>Republic of Ireland — OPW CFRAM, NIFM and National Coastal Flood Hazard Mapping current-scenario river and coastal extents. Source and return-period distinctions are retained; Northern Ireland is not included.</p>
-            <p>Contains Office of Public Works information © Office of Public Works.</p>
-            <a href="https://www.floodinfo.ie/open-spatial-data-portal/data-catalogue/" target="_blank" rel="noreferrer">OPW open spatial data catalogue ↗</a>
-          </details>
-          <details className="coverage-note landscape-note">
-              <summary>Land and water</summary>
-              <p>
-                Flood Zones 2 and 3 map areas used in planning for river and sea
-                flooding. Explore them alongside the landscapes shaped by water
-                and by people.
-              </p>
-              <p>
-                Ely stands on higher ground in the Fens, once an island within
-                surrounding marshland. Large-scale drainage changed the Fens in
-                the 17th century.
-              </p>
-              <a
-                href="https://www.gov.uk/government/publications/fens-2100/fens-2100-summary-baseline-report"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Fens 2100+ history and landscape ↗
-              </a>
-          </details>
         </div>
         <footer className="sidebar-footer">
             ENGLAND + WALES + SCOTLAND + REPUBLIC OF IRELAND FLOOD DATA
@@ -788,6 +750,14 @@ const FloodMap = () => {
           }
         >
           ⌖ <span>Britain + Ireland overview</span>
+        </button>
+        <button
+          className="about-toggle"
+          type="button"
+          onClick={() => aboutDialog.current?.showModal()}
+          aria-haspopup="dialog"
+        >
+          About / Data Sources
         </button>
         <div
           className={`map-status ${dataError || mapError ? 'has-error' : ''}`}
@@ -819,6 +789,68 @@ const FloodMap = () => {
           <small>SIMPLIFIED EXTENTS</small>
         </div>
       </section>
+      <dialog
+        ref={aboutDialog}
+        className="about-dialog"
+        aria-labelledby="about-title"
+        onClick={(event) => {
+          if (event.target === aboutDialog.current) aboutDialog.current?.close();
+        }}
+      >
+        <div className="about-dialog-header">
+          <div>
+            <span className="eyebrow">Floodplain Atlas</span>
+            <h2 id="about-title">About / Data Sources</h2>
+          </div>
+          <button
+            type="button"
+            className="about-close"
+            onClick={() => aboutDialog.current?.close()}
+            aria-label="Close About and Data Sources"
+          >
+            ×
+          </button>
+        </div>
+        <div className="about-dialog-content">
+          <section aria-labelledby="coverage-title">
+            <h3 id="coverage-title">Coverage and limitations</h3>
+            <p>
+              England, Wales, Scotland and the Republic of Ireland use separate datasets and classifications. Scotland and Ireland each show one selected scenario at a time. Ireland return periods combine only source products that publish that period: 20-year is NIFM river; 200-year is coastal; 100-year is CFRAM and NIFM river; 10- and 1,000-year include the available river and coastal products. Ireland's 100-year Medium scenario uses the dark blue of England's Flood Zone 3; other Ireland scenarios use teal. Colors do not make the classifications identical. Ireland coverage excludes Northern Ireland. Unshaded areas do not guarantee safety. These are strategic and planning layers, not live warnings or property-level assessments.
+            </p>
+          </section>
+          <section aria-labelledby="england-source-title">
+            <h3 id="england-source-title">England · Environment Agency</h3>
+            <p>Flood Map for Planning, Flood Zones. Source data date unverified. © Environment Agency copyright and/or database right. All rights reserved.</p>
+            <a href="https://environment.data.gov.uk/dataset/04532375-a198-476e-985e-0579a0a11b47" target="_blank" rel="noreferrer">Environment Agency source description ↗</a>
+          </section>
+          <section aria-labelledby="wales-source-title">
+            <h3 id="wales-source-title">Wales · Natural Resources Wales</h3>
+            <p>Flood Map for Planning, River and Sea Flood Zones 2 and 3. Publication date: 21 May 2026. Includes climate-change allowances; assumes no defences.</p>
+            <p>Contains Natural Resources Wales information © Natural Resources Wales and database right. All rights reserved. Some features of this information are based on digital spatial data licensed from the UK Centre for Ecology &amp; Hydrology © UKCEH. Defra, Met Office and DARD Rivers Agency © Crown copyright. © Cranfield University. © James Hutton Institute. Contains OS data © Crown copyright and database right.</p>
+            <a href="https://datamap.gov.wales/layergroups/inspire-nrw:FloodMapforPlanningFloodZones2and3/metadata_detail" target="_blank" rel="noreferrer">NRW data and attribution ↗</a>
+            <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noreferrer">Open Government Licence v3 ↗</a>
+          </section>
+          <section aria-labelledby="scotland-source-title">
+            <h3 id="scotland-source-title">Scotland · SEPA</h3>
+            <p>Scottish Environment Protection Agency Flood Map v3.0 river and coastal extents, published 25 February 2025. © SEPA 2025; licensed under the Open Government Licence 3.0.</p>
+            <a href="/sources/sepa-river-attribution-v3.pdf" target="_blank" rel="noreferrer">SEPA river dataset attribution statements ↗</a>
+            <a href="/sources/sepa-coastal-attribution-v3.pdf" target="_blank" rel="noreferrer">SEPA coastal dataset attribution statements ↗</a>
+            <a href="https://www2.sepa.org.uk/FloodData/" target="_blank" rel="noreferrer">SEPA flood data and release notes ↗</a>
+          </section>
+          <section aria-labelledby="ireland-source-title">
+            <h3 id="ireland-source-title">Republic of Ireland · OPW</h3>
+            <p>OPW CFRAM, NIFM and National Coastal Flood Hazard Mapping current-scenario river and coastal extents. Source and return-period distinctions are retained; Northern Ireland is not included.</p>
+            <p>Contains Office of Public Works information © Office of Public Works.</p>
+            <a href="https://www.floodinfo.ie/open-spatial-data-portal/data-catalogue/" target="_blank" rel="noreferrer">OPW open spatial data catalogue ↗</a>
+          </section>
+          <section aria-labelledby="landscape-title">
+            <h3 id="landscape-title">Land and water</h3>
+            <p>Flood Zones 2 and 3 map areas used in planning for river and sea flooding. Explore them alongside the landscapes shaped by water and by people.</p>
+            <p>Ely stands on higher ground in the Fens, once an island within surrounding marshland. Large-scale drainage changed the Fens in the 17th century.</p>
+            <a href="https://www.gov.uk/government/publications/fens-2100/fens-2100-summary-baseline-report" target="_blank" rel="noreferrer">Fens 2100+ history and landscape ↗</a>
+          </section>
+        </div>
+      </dialog>
     </main>
   );
 };

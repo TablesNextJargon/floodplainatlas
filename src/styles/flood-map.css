@@ -339,26 +339,6 @@ h1 em {
 .feature-card dd {
   margin: 0;
 }
-.coverage-note {
-  margin: 23px 0 0;
-}
-.coverage-note summary {
-  cursor: pointer;
-  padding: 5px 0;
-  font-size: 11px;
-  color: #d5e6e9;
-}
-.coverage-note p {
-  font-size: 10px;
-  color: #a9bec8;
-  line-height: 1.8;
-  margin: 9px 0;
-}
-.coverage-note a {
-  font-size: 10px;
-  color: #83decb;
-  text-underline-offset: 3px;
-}
 .sidebar-footer {
   padding: 17px 30px;
   border-top: 1px solid #ffffff16;
@@ -436,6 +416,99 @@ h1 em {
 .reset-view span {
   font-size: 11px;
   margin-left: 6px;
+}
+.about-toggle {
+  position: absolute;
+  top: 75px;
+  right: 15px;
+  z-index: 2;
+  padding: 10px 13px;
+  border: 1px solid #dce4df;
+  border-radius: 5px;
+  background: #fff;
+  color: #234552;
+  box-shadow: 0 3px 15px #102b3a08;
+  font-size: 11px;
+  font-weight: 600;
+}
+.about-dialog {
+  width: min(720px, calc(100vw - 32px));
+  max-height: min(84dvh, 780px);
+  padding: 0;
+  border: 1px solid #d3dfdc;
+  border-radius: 10px;
+  background: #f7faf8;
+  color: #183846;
+  box-shadow: 0 20px 70px #102b3a55;
+}
+.about-dialog::backdrop {
+  background: #0a202bb8;
+  backdrop-filter: blur(2px);
+}
+.about-dialog-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #dce6e2;
+  background: #f7faf8;
+}
+.about-dialog-header .eyebrow {
+  color: #267e70;
+}
+.about-dialog-header h2 {
+  margin: 5px 0 0;
+  font-family: Manrope, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+}
+.about-close {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #cbd9d5;
+  border-radius: 50%;
+  background: white;
+  color: #183846;
+  font-size: 26px;
+  line-height: 1;
+}
+.about-dialog-content {
+  overflow: auto;
+  max-height: calc(min(84dvh, 780px) - 81px);
+  padding: 5px 24px 24px;
+  scrollbar-width: thin;
+}
+.about-dialog-content section {
+  padding: 16px 0;
+  border-bottom: 1px solid #dce6e2;
+}
+.about-dialog-content section:last-child {
+  border-bottom: 0;
+}
+.about-dialog-content h3 {
+  margin: 0 0 8px;
+  font-family: Manrope, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+.about-dialog-content p {
+  margin: 8px 0;
+  color: #48616a;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.about-dialog-content a {
+  display: inline-block;
+  margin: 4px 16px 4px 0;
+  color: #176f68;
+  font-size: 12px;
+  line-height: 1.6;
+  text-underline-offset: 3px;
 }
 .map-status {
   position: absolute;
@@ -614,6 +687,11 @@ h1 em {
   .reset-view {
     top: 90px;
     left: 14px;
+  }
+  .about-toggle {
+    top: 58px;
+    right: 12px;
+    padding: 9px 11px;
   }
   .map-status {
     left: 14px;
