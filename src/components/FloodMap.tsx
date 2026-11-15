@@ -241,22 +241,20 @@ const FloodMap = () => {
       });
       setMapReady(true);
       try {
-        const archives: Array<{
-          dataset: DataRegion;
-          source: Awaited<ReturnType<typeof loadFloodTileSource>>;
-          archive: PMTiles;
-        }> = [];
-        for (const dataset of DATASETS) {
-          try {
+        const results = await Promise.allSettled(
+          DATASETS.map(async (dataset) => {
             const source = await loadFloodTileSource(dataset, abort.signal);
             const archive = new PMTiles(source);
             const header = await archive.getHeader();
             if (header.tileType !== 1) throw new Error('Expected vector tiles');
-            archives.push({ dataset, source, archive });
-          } catch {
-            sourceFailed.add(dataset);
-          }
-        }
+            return { dataset, source, archive };
+          }),
+        );
+        const archives = results.flatMap((result, index) => {
+          if (result.status === 'fulfilled') return [result.value];
+          sourceFailed.add(DATASETS[index]);
+          return [];
+        });
         if (!archives.length) throw new Error('Neither regional flood archive could be loaded.');
         if (disposed) return;
         for (const { archive } of archives) tileProtocol.add(archive);
