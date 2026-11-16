@@ -3,18 +3,13 @@ import {
   Map,
   NavigationControl,
   Marker,
-  setWorkerUrl,
   addProtocol,
   type MapGeoJSONFeature,
 } from 'maplibre-gl';
 import { Protocol, PMTiles } from 'pmtiles';
 import { loadFloodTileSource } from '../lib/flood-tile-source';
-import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-// Vite must emit the worker as an asset rather than resolve it relative to an
-// optimized dependency module in node_modules/.vite/deps.
-setWorkerUrl(workerUrl);
 const tileProtocol = new Protocol();
 addProtocol('pmtiles', tileProtocol.tile);
 
@@ -164,6 +159,7 @@ const FloodMap = () => {
     let keyboardInspection = false;
     const abort = new AbortController();
     let map: Map;
+    let attributionObserver: MutationObserver | null = null;
     setDataReady(false);
     setMapReady(false);
     setDataError(false);
@@ -188,6 +184,31 @@ const FloodMap = () => {
       return;
     }
     mapRef.current = map;
+    const collapseAttribution = (): void => {
+      const attribution = container.current?.querySelector<HTMLDetailsElement>(
+        '.maplibregl-ctrl-attrib',
+      );
+      attribution?.removeAttribute('open');
+      if (attribution?.classList.contains('maplibregl-compact-show')) {
+        attribution.classList.remove('maplibregl-compact-show');
+      }
+    };
+    collapseAttribution();
+    const attribution = container.current?.querySelector<HTMLDetailsElement>(
+      '.maplibregl-ctrl-attrib',
+    );
+    if (attribution) {
+      attributionObserver = new MutationObserver(collapseAttribution);
+      attributionObserver.observe(attribution, {
+        attributes: true,
+        attributeFilter: ['open', 'class'],
+      });
+    }
+    map.once('load', () => {
+      collapseAttribution();
+      attributionObserver?.disconnect();
+      attributionObserver = null;
+    });
     const canvas = map.getCanvas();
     canvas.setAttribute(
       'aria-label',
@@ -387,6 +408,7 @@ const FloodMap = () => {
       searchAbort.current?.abort();
       searchAbort.current = null;
       observer.disconnect();
+      attributionObserver?.disconnect();
       canvas.removeEventListener('keydown', handleMapKeyDown);
       markerRef.current?.remove();
       markerRef.current = null;
